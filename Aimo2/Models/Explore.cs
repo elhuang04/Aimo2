@@ -8,7 +8,7 @@ namespace Aimo.Models
         }
 
         public int Id { get; set; }
-        public string Type { get; set; }
+        public int People_Needed { get; set; }
         public string Requester { get; set; }
         public string Accepted_By { get; set; }
         public DateTime Due_Date { get; set; }

@@ -17,7 +17,7 @@ namespace Aimo2.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Type = table.Column<string>(type: "TEXT", nullable: false),
+                    PeopleNeeded = table.Column<int>(name: "People_Needed", type: "INTEGER", nullable: false),
                     Requester = table.Column<string>(type: "TEXT", nullable: false),
                     AcceptedBy = table.Column<string>(name: "Accepted_By", type: "TEXT", nullable: false),
                     DueDate = table.Column<DateTime>(name: "Due_Date", type: "TEXT", nullable: false),

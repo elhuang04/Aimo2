@@ -2,18 +2,45 @@
 
 @{
     ViewData["Title"] = "Index";
+    DateTime sdate = DateTime.Today;
+    DateTime edate = DateTime.Today.AddMonths(3);
+    //display selected dates values, may not be the best method
+    string startdt ="";
+    if (TempData.ContainsKey("startdt")  )
+        {          
+            if (TempData["startdt"] != null)
+            startdt =  TempData["startdt"].ToString();
+        }
+    string enddt = "";
+    if (TempData.ContainsKey("enddt"))
+    { 
+        if (TempData["enddt"] != null)
+        enddt = TempData["enddt"].ToString();
+    }
+    //TempData.Keep("startdt");
+   // TempData.Keep("enddt");
 }
+ 
 
 <h1>Index</h1>
-
+  
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form asp-controller="Explore" asp-action="Index" name="fdate">
+    <p>
+        Start: <input type="date" name="StartDate" value="@startdt" required />
+        End: <input type="date" name="EndDate" value="@enddt" required  />
+        <input type="submit" value="Filter" formaction=@Url.Action("FilterbyDate") />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Type)
+                @Html.DisplayNameFor(model => model.People_Needed)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Requester)
@@ -34,7 +61,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @Html.DisplayFor(modelItem => item.People_Needed)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Requester)

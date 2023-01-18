@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Aimo.Models;
 using Aimo2.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Drawing.Printing;
+using System.Composition;
+using Microsoft.Data.SqlClient;
 
 namespace Aimo2.Controllers
 {
@@ -21,16 +24,48 @@ namespace Aimo2.Controllers
         }
 
         // GET: Explore
+        /*[Authorize]
+        public async Task<> Index()
+        {
+            return _context.Explore != null ?
+                        View(await _context.Explore.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Explore'  is null.");
+        }*/
         [Authorize]
         public async Task<IActionResult> Index()
         {
-              return _context.Explore != null ? 
+            return _context.Explore != null ?
                           View(await _context.Explore.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Explore'  is null.");
-        }
 
-        // GET: Explore/Details/5
-        [Authorize]
+
+        }
+        [HttpPost]
+        public ActionResult FilterbyDate(DateTime StartDate, DateTime EndDate)
+        {
+
+            if (_context.Explore == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Explore'  is null.");
+            }
+            var explore = from m in _context.Explore
+                          select m;
+
+             
+            if (!String.IsNullOrEmpty(StartDate.ToString()) && !String.IsNullOrEmpty(EndDate.ToString()))
+            {
+                //save input values to tempdata, similar to session param
+                TempData["startdt"]=StartDate.ToString("yyyy-MM-dd");
+                TempData["enddt"] = EndDate.ToString("yyyy-MM-dd");
+                explore = explore.Where(s => s.Due_Date!.Date >= StartDate && s.Due_Date!.Date <= EndDate);
+                return View("Index",explore);  
+            }
+            return View();
+        }
+     
+
+    // GET: Explore/Details/5
+    [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Explore == null)
@@ -61,7 +96,7 @@ namespace Aimo2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Type,Requester,Accepted_By,Due_Date,Status")] Explore explore)
+        public async Task<IActionResult> Create([Bind("Id,People_Needed,Requester,Accepted_By,Due_Date,Status")] Explore explore)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +130,7 @@ namespace Aimo2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Requester,Accepted_By,Due_Date,Status")] Explore explore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,People_Needed,Requester,Accepted_By,Due_Date,Status")] Explore explore)
         {
             if (id != explore.Id)
             {
