@@ -1,9 +1,67 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="~/css/styles.css">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="popup" style="background-color: rgba(63,63,63,.8);
+    color: white;
+    left: 0;
+    margin: auto;
+    padding: 20px;
+    position: absolute;
+    right: 0;
+    top: 72px;
+    width: 730px;
+    z-index: 3;">
+    <!-- cancel button-->
+    <button type="submit" name="submit" id="close" class="default-input sale-text-req">&times;</button>
+    
+    <div id="pop">
+        <input id="checkbox" name="checkbox" type="checkbox" required class="default-input sale-text-req" onclick="checkTerms(); />
+        <label for="checkbox"> I have read and consent to aimo!’s @Html.ActionLink("Terms of Use","Policies","Home", null, new { @class = "page-scroll" }) and @Html.ActionLink("Privacy Policy","Policies","Home", null, new { @class = "page-scroll" }).</label>
+    </div>
+    <div id="pop">
+        <input id="checkbox" name="checkbox" type="checkbox" required class="default-input sale-text-req" onclick="checkTerms(); />
+        <label for="checkbox"> By joining the aimo! community, you agree to comply with our @Html.ActionLink("Community Guidelines","Policies","Home", null, new { @class = "page-scroll" }).</label>
+    </div>
+    <input type="submit" name="submit" class="default-input sale-text-req" />
 </div>
+<script>
+     function checkTerms() {
+     if($('input[type="checkbox"]').is(":checked")
+     {
+         $('input[type="submit"]').attr('disabled', 'disabled');
+     }
+     else
+     {
+         $('input[type="submit"]').removeAttr('disabled');
+     }
+ }
+</script>
 
+<body style="background-image:url('https://drive.google.com/uc?export=view&id=11GI6_HoVdGPwyK7rgRnqBM2FysDwIdMV');">
+
+<h2 style="text-align:center; color:white">
+    Welcome to
+</h2>
+
+<h1 style="color: #C9DAF9">
+    aimo!
+</h1>
+
+<script>
+    window.addEventListener("load", function(){
+//setTimeout() method sets a timer which executes a function once the timer expires
+    setTimeout(
+        function open(event){
+            document.querySelector(".popup").style.display = "block";
+        },
+        2000 // 1 seconds = 1000 milliseconds
+    )
+});
+//Activate the cancel button
+document.querySelector("#close").addEventListener("click", function(){
+    document.querySelector(".popup").style.display = "none";
+});
+</script>
+</body>

@@ -20,13 +20,13 @@ namespace Aimo2.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
 
-            modelBuilder.Entity("Aimo.Models.Explore", b =>
+            modelBuilder.Entity("Aimo2.Models.Explore", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Accepted_By")
+                    b.Property<string>("Task_Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

@@ -1,4 +1,4 @@
-@model Aimo.Models.Explore
+@model Aimo2.Models.Explore
 
 @{
     ViewData["Title"] = "Delete";
@@ -11,35 +11,54 @@
     <h4>Explore</h4>
     <hr />
     <dl class="row">
+            @*1.Task Title*@
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Task_Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Task_Title)
+        </dd>
+            @*2.Requester*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Requester)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Requester)
+        </dd>
+        @*3.People Needed*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.People_Needed)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.People_Needed)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Requester)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Requester)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Accepted_By)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Accepted_By)
-        </dd>
-        <dt class = "col-sm-2">
+        @*4.Due Date*@
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Due_Date)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Due_Date)
         </dd>
+        @*5.Description*@
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        @*6.Status*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
+            @Html.DisplayFor(model => model.People_Claimed)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.People_Claimed)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.People_Claimed)
         </dd>
     </dl>
     

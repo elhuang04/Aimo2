@@ -1,5 +1,13 @@
-@model IEnumerable<Aimo.Models.Explore>
+@model IEnumerable<Aimo2.Models.Explore>
+<link rel="stylesheet" href="~/css/styles.css">
 
+<style>
+    body {
+        background-color: #2A3065;
+    }
+</style>
+<head></head>
+<body>
 @{
     ViewData["Title"] = "Index";
     DateTime sdate = DateTime.Today;
@@ -17,26 +25,17 @@
         if (TempData["enddt"] != null)
         enddt = TempData["enddt"].ToString();
     }
-    //TempData.Keep("startdt");
-   // TempData.Keep("enddt");
 }
- 
-
-<h1>Index</h1>
-  
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<form asp-controller="Explore" asp-action="Index" name="fdate">
-    <p>
+    <form asp-controller="Explore" asp-action="Index" name="fdate">
+        <b3 style ="color:white";>
         Start: <input type="date" name="StartDate" value="@startdt" required />
         End: <input type="date" name="EndDate" value="@enddt" required  />
         <input type="submit" value="Filter" formaction=@Url.Action("FilterbyDate") />
-    </p>
+    </b3>
 </form>
 
 <table class="table">
+@*
     <thead>
         <tr>
             <th>
@@ -46,7 +45,7 @@
                 @Html.DisplayNameFor(model => model.Requester)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Accepted_By)
+                @Html.DisplayNameFor(model => model.Task_Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Due_Date)
@@ -57,30 +56,64 @@
             <th></th>
         </tr>
     </thead>
+ *@
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.People_Needed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Requester)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Accepted_By)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Due_Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
+                <tr>
+                    <td>
+                    <h3>
+                        @Html.DisplayFor(modelItem => item.Task_Title)
+                    </h3>
+                    <br>
+                    <b4>
+                        Requester: @Html.DisplayFor(modelItem => item.Requester)
+                    </b4>
+                    <br>
+                    <b3>
+                        People Needed: @Html.DisplayFor(modelItem => item.People_Needed)
+                    </b3>
+                    <br>
+                    <b3>
+                        Due Date: @Html.DisplayFor(modelItem => item.Due_Date)
+                    </b3>
+                    <br>
+                    <b2>
+                        Description @Html.DisplayFor(modelItem => item.Description)
+                    </b2>
+                        <b3>
+                            People Claimed @Html.DisplayFor(modelItem => item.People_Claimed)
+                        </b3>
+                        <a asp-action="Details" asp-route-id="@item.Id">See Details</a>
+
+                        @*<form asp-controller="Explore" asp-action="Index" name="UpdateClaim">
+                    
+                    <button type="submit" value="submit" formaction=@Url.Action("UpdateClaim")>
+                    </button>
+                    </form>*@
+                    <br>
+                    <br>
+                    <a asp-action="Claim" asp-route-id="@item.Id">Claim</a>
+                        @*<button type="submit" formaction=@Url.Action("Status") method="post">  Claim</button>*@
+                        @*subtracting 1 from people needed if claimed, add 0 if not claimed*@
+
+                        @*
+                        <button type="submit" name="status" value="hiddenvalue">Claimed</button>
+                        
+                        <button name="status" value="claimed">Claimed</button>
+                        <button type="submit" value="submit" formaction=@Url.Action("FilterbyDate") />
+                        *@
+                   
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</body>
+
+<div class="circle">
+    <p>
+        <a style="color:white; text-decoration:none" asp-action="Create">+</a>
+    </p>
+</div>

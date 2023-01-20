@@ -1,4 +1,4 @@
-@model Aimo.Models.Explore
+@model Aimo2.Models.Explore
 
 @{
     ViewData["Title"] = "Create";
@@ -12,30 +12,47 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*1.Task Title*@
             <div class="form-group">
-                <label asp-for="People_Needed" class="control-label"></label>
-                <input asp-for="People_Needed" class="form-control" />
-                <span asp-validation-for="People_Needed" class="text-danger"></span>
+                <label asp-for="Task_Title" class="control-label"></label>
+                <input asp-for="Task_Title" class="form-control" />
+                <span asp-validation-for="Task_Title" class="text-danger"></span>
             </div>
+            @*2.Requester*@
             <div class="form-group">
                 <label asp-for="Requester" class="control-label"></label>
                 <input asp-for="Requester" class="form-control" />
                 <span asp-validation-for="Requester" class="text-danger"></span>
             </div>
+            @*3.People Needed*@
             <div class="form-group">
-                <label asp-for="Accepted_By" class="control-label"></label>
-                <input asp-for="Accepted_By" class="form-control" />
-                <span asp-validation-for="Accepted_By" class="text-danger"></span>
+                <label asp-for="People_Needed" class="control-label"></label>
+                <input asp-for="People_Needed" class="form-control" />
+                <span asp-validation-for="People_Needed" class="text-danger"></span>
             </div>
+            @*4.Due Date*@
             <div class="form-group">
                 <label asp-for="Due_Date" class="control-label"></label>
                 <input asp-for="Due_Date" class="form-control" />
                 <span asp-validation-for="Due_Date" class="text-danger"></span>
             </div>
+            @*5.Description*@
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            @*6.Status*@
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="People_Claimed" class="control-label"></label>
+                <input asp-for="People_Claimed" class="form-control" />
+                <span asp-validation-for="People_Claimed" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

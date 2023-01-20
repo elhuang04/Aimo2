@@ -14,6 +14,9 @@
     <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="wwwroot\css\styles.css" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 

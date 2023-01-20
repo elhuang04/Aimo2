@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Aimo.Models;
+using Aimo2.Models;
 using Aimo2.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Drawing.Printing;
 using System.Composition;
 using Microsoft.Data.SqlClient;
+using System.Security.Claims;
 
 namespace Aimo2.Controllers
 {
@@ -22,7 +23,7 @@ namespace Aimo2.Controllers
         {
             _context = context;
         }
-
+        
         // GET: Explore
         /*[Authorize]
         public async Task<> Index()
@@ -37,7 +38,6 @@ namespace Aimo2.Controllers
             return _context.Explore != null ?
                           View(await _context.Explore.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Explore'  is null.");
-
 
         }
         [HttpPost]
@@ -62,10 +62,9 @@ namespace Aimo2.Controllers
             }
             return View();
         }
-     
 
-    // GET: Explore/Details/5
-    [Authorize]
+        // GET: Explore/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Explore == null)
@@ -96,7 +95,7 @@ namespace Aimo2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,People_Needed,Requester,Accepted_By,Due_Date,Status")] Explore explore)
+        public async Task<IActionResult> Create([Bind("Id,People_Needed,Requester,Task_Title,Due_Date,Status,Description,People_Claimed")] Explore explore)
         {
             if (ModelState.IsValid)
             {
@@ -130,7 +129,7 @@ namespace Aimo2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,People_Needed,Requester,Accepted_By,Due_Date,Status")] Explore explore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,People_Needed,Requester,Task_Title,Due_Date,Status,Description,People_Claimed")] Explore explore)
         {
             if (id != explore.Id)
             {
@@ -160,6 +159,64 @@ namespace Aimo2.Controllers
             return View(explore);
         }
 
+
+        //CLAIMCSIVMIVMS
+        // GET: Explore/Edit/5
+        [Authorize]
+        public async Task<IActionResult> Claim(int? id)
+        {
+            if (id == null || _context.Explore == null)
+            {
+                return NotFound();
+            }
+
+            var explore = await _context.Explore.FindAsync(id);
+            if (explore == null)
+            {
+                return NotFound();
+            }
+            return View(explore);
+        }
+
+        // POST: Explore/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Claim(int id, [Bind("Id,People_Needed,Requester,Task_Title,Due_Date,Status,Description,People_Claimed")] Explore explore)
+        {
+            if (id != explore.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(explore);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ExploreExists(explore.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(explore);
+        }
+
+
+
+
         // GET: Explore/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
@@ -178,6 +235,8 @@ namespace Aimo2.Controllers
 
             return View(explore);
         }
+
+
 
         // POST: Explore/Delete/5
         [HttpPost, ActionName("Delete")]

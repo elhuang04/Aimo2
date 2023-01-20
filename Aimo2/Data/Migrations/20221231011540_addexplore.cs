@@ -19,9 +19,10 @@ namespace Aimo2.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PeopleNeeded = table.Column<int>(name: "People_Needed", type: "INTEGER", nullable: false),
                     Requester = table.Column<string>(type: "TEXT", nullable: false),
-                    AcceptedBy = table.Column<string>(name: "Accepted_By", type: "TEXT", nullable: false),
+                    AcceptedBy = table.Column<string>(name: "Task_Title", type: "TEXT", nullable: false),
                     DueDate = table.Column<DateTime>(name: "Due_Date", type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: false)
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    People_Claimed = table.Column<int>(type: "INTEGER", nullable: true),
                 },
                 constraints: table =>
                 {
