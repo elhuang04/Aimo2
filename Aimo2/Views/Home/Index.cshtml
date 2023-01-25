@@ -2,7 +2,6 @@
     ViewData["Title"] = "Home Page";
 }
 <link rel="stylesheet" href="~/css/styles.css">
-
 <div class="popup" style="background-color: rgba(63,63,63,.8);
     color: white;
     left: 0;
@@ -14,32 +13,44 @@
     width: 730px;
     z-index: 3;">
     <!-- cancel button-->
-    <button type="submit" name="submit" id="close" class="default-input sale-text-req">&times;</button>
+    <!--<button type="submit" name="cancel" id="close" class="default-input sale-text-req">&times;</button> -->
     
     <div id="pop">
-        <input id="checkbox" name="checkbox" type="checkbox" required class="default-input sale-text-req" onclick="checkTerms(); />
+        <input id="checkbox1" name="checkbox" type="checkbox" required class="default-input sale-text-req" onchange='handleChange(this);' />
         <label for="checkbox"> I have read and consent to aimo!’s @Html.ActionLink("Terms of Use","Policies","Home", null, new { @class = "page-scroll" }) and @Html.ActionLink("Privacy Policy","Policies","Home", null, new { @class = "page-scroll" }).</label>
     </div>
     <div id="pop">
-        <input id="checkbox" name="checkbox" type="checkbox" required class="default-input sale-text-req" onclick="checkTerms(); />
+        <input id="checkbox2" name="checkbox" type="checkbox" required class="default-input sale-text-req" onchange='handleChange(this);' />
         <label for="checkbox"> By joining the aimo! community, you agree to comply with our @Html.ActionLink("Community Guidelines","Policies","Home", null, new { @class = "page-scroll" }).</label>
     </div>
-    <input type="submit" name="submit" class="default-input sale-text-req" />
+    <input type="submit" name="Submit" id="subok" class="default-input sale-text-req" value="Submit">
 </div>
 <script>
-     function checkTerms() {
-     if($('input[type="checkbox"]').is(":checked")
-     {
-         $('input[type="submit"]').attr('disabled', 'disabled');
+     
+     checkTerms() {
+     
+      if($('input[type="checkbox"]').is(":checked")
+      {
+         //$('input[type="submit"]').attr('disabled', 'disabled');
+            $('input[type="submit"]').removeAttr('disabled');
+            document.getElementById("subok").removeAttr('disabled');
      }
      else
      {
          $('input[type="submit"]').removeAttr('disabled');
      }
  }
+    
+ function handleChange(checkbox) {
+    if(checkbox.checked == true){
+        document.getElementById("subok").removeAttribute("disabled");
+    }else{
+        document.getElementById("subok").setAttribute("disabled", "disabled");
+   }
+}
 </script>
-
-<body style="background-image:url('https://drive.google.com/uc?export=view&id=11GI6_HoVdGPwyK7rgRnqBM2FysDwIdMV');">
+<!--https://drive.google.com/uc?export=view&id=11GI6_HoVdGPwyK7rgRnqBM2FysDwIdMV*/-->
+<body style="background-image:url('@Url.Content("~/css/bggd.png")');z-index:-1">
 
 <h2 style="text-align:center; color:white">
     Welcome to
@@ -56,11 +67,11 @@
         function open(event){
             document.querySelector(".popup").style.display = "block";
         },
-        2000 // 1 seconds = 1000 milliseconds
+        1000 // 1 seconds = 1000 milliseconds
     )
 });
 //Activate the cancel button
-document.querySelector("#close").addEventListener("click", function(){
+document.querySelector("#subok").addEventListener("click", function(){
     document.querySelector(".popup").style.display = "none";
 });
 </script>

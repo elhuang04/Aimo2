@@ -78,17 +78,6 @@ sub {
 }
 
 
-td {
-    border: none;
-}
-
-tr, td {
-    display: inline-block;
-    margin: 25px;
-    background-color: white;
-    border-radius: 15px;
-    width: 300px;
-}
 .circle {
     position: fixed;
     left: 90%;
@@ -152,3 +141,46 @@ tr, td {
     line-height: 25px;
 }
 
+.hoho {
+    font-family: 'DM Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 31px;
+    padding-right: 50px;
+}
+
+.trd {
+    border: none;
+    display: inline-block;
+    margin: 25px;
+    background-color: white;
+    border-radius: 15px;
+    width: 300px;
+}
+
+.sad {
+    border: none;
+    display: block;
+    margin: 25px;
+    background-color: white;
+    border-radius: 15px;
+    width:100%;
+}
+
+.searchie {
+    background-color: white;
+    border-radius: 5px;
+    height: 30px;
+    width: 70%;
+    font-size:16px;
+}
+
+bocks {
+    background: #4AD2E4;
+    border-radius: 15px;
+    width:90%;
+    align-content:center;
+    position:absolute;
+    top:15%;
+}

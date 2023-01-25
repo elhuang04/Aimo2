@@ -2,6 +2,20 @@
 
 @{
     ViewData["Title"] = "Claim";
+    int PeopleClaim = 0;
+    int PeopleClaimPlus = 0;
+    if (ViewData["People_Claimed"] is not null)
+    {
+        try
+        {
+            PeopleClaim = int.Parse(ViewData["People_Claimed"].ToString());
+            PeopleClaimPlus = PeopleClaim + 1;
+        }
+        catch(Exception e)
+        {
+            Console.Write(e.Message);
+        }
+    }
 }
 
 <h1>Claim</h1>
@@ -50,14 +64,14 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="People_Claimed" class="control-label"></label>
-                <input asp-for="People_Claimed" class="form-control"/>
+                @* <label asp-for="People_Claimed" class="control-label"></label>
+                <input asp-for="People_Claimed" class="form-control"/>*@
                 <span asp-validation-for="People_Claimed" class="text-danger"></span>
-                <input type="hidden" asp-for="People_Claimed" value="0" />
-
+                <p>Current total claim:@PeopleClaim</p>
+                <input type="hidden" asp-for="People_Claimed" value="@PeopleClaimPlus" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Confirm Claim" class="btn btn-primary"/>
             </div>
         </form>
     </div>

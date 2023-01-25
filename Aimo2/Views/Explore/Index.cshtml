@@ -8,28 +8,52 @@
 </style>
 <head></head>
 <body>
-@{
-    ViewData["Title"] = "Index";
-    DateTime sdate = DateTime.Today;
-    DateTime edate = DateTime.Today.AddMonths(3);
-    //display selected dates values, may not be the best method
-    string startdt ="";
-    if (TempData.ContainsKey("startdt")  )
+    @{
+        ViewData["Title"] = "Index";
+        DateTime sdate = DateTime.Today;
+        DateTime edate = DateTime.Today.AddMonths(3);
+        //display selected dates values, may not be the best method//
+        string startdt = null;// DateTime.Today.AddMonths(-3).ToString("yyyy-MM-dd"); ;
+        if (TempData.ContainsKey("startdt")  )
         {          
             if (TempData["startdt"] != null)
-            startdt =  TempData["startdt"].ToString();
+            {
+                if (TempData["startdt"].ToString() != "0001-01-01"  )
+                    startdt = TempData["startdt"].ToString();
+            }
+
         }
-    string enddt = "";
-    if (TempData.ContainsKey("enddt"))
-    { 
-        if (TempData["enddt"] != null)
-        enddt = TempData["enddt"].ToString();
+        string enddt = null;// DateTime.Today.AddMonths(3).ToString("yyyy-MM-dd");
+        if (TempData.ContainsKey("enddt"))
+        { 
+            if (TempData["enddt"] != null)
+            {
+                if (TempData["enddt"].ToString() != "0001-01-01"  )        
+                enddt = TempData["enddt"].ToString();
+            }
+        }
+        string pclaimed = "";
+        string npclaimed = "";
+        int count = 0;
+        string searchtxt = "";
+        if (TempData["FilterbyTitle"] != null)
+            searchtxt=TempData["FilterbyTitle"].ToString();
     }
-}
+
+
     <form asp-controller="Explore" asp-action="Index" name="fdate">
-        <b3 style ="color:white";>
-        Start: <input type="date" name="StartDate" value="@startdt" required />
-        End: <input type="date" name="EndDate" value="@enddt" required  />
+        <div class="form-actions no-color">
+            <b2>
+                
+                <input class="searchie" type="text" name="SearchText" value="@searchtxt" placeholder="Search by request name, tag, requester..." />               
+                <a style="font-size:14px" asp-action="Index">Back to All Results</a>
+            </b2>
+        </div>
+        <b3 style="color:white" ;>
+             
+            Start: <input type="date" name="StartDate" value="@startdt" />  
+            End: <input type="date" name="EndDate" value="@enddt" />
+          
         <input type="submit" value="Filter" formaction=@Url.Action("FilterbyDate") />
     </b3>
 </form>
@@ -59,7 +83,10 @@
  *@
     <tbody>
 @foreach (var item in Model) {
-                <tr>
+                count++;
+                if((item.Due_Date-DateTime.Today).Days>=0 && count<4)
+                {
+                    <tr class="trd">
                     <td>
                     <h3>
                         @Html.DisplayFor(modelItem => item.Task_Title)
@@ -82,6 +109,19 @@
                     </b2>
                         <b3>
                             People Claimed @Html.DisplayFor(modelItem => item.People_Claimed)
+                            
+                            @{
+                                if ((item.People_Needed-item.People_Claimed)>0)
+                            {
+                                pclaimed="inline";
+                                npclaimed="none";
+                            }
+
+                            else{
+                                pclaimed="none";
+                                npclaimed="inline";
+                            }
+                            }
                         </b3>
                         <a asp-action="Details" asp-route-id="@item.Id">See Details</a>
 
@@ -92,7 +132,11 @@
                     </form>*@
                     <br>
                     <br>
-                    <a asp-action="Claim" asp-route-id="@item.Id">Claim</a>
+                    <span style="display:@pclaimed;">
+                    <a asp-action="Claim" asp-route-id="@item.Id">Claim</a> |
+                    </span>
+                        <span style="display:@npclaimed;">
+                    </span>
                         @*<button type="submit" formaction=@Url.Action("Status") method="post">  Claim</button>*@
                         @*subtracting 1 from people needed if claimed, add 0 if not claimed*@
 
@@ -106,8 +150,70 @@
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
-        </tr>
-}
+                    </tr>
+                }
+                else
+                {
+                    <tr class="sad">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Task_Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Requester)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.People_Needed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Due_Date)
+                        </td>
+                        <td>
+                            <b3>
+                                People Claimed @Html.DisplayFor(modelItem => item.People_Claimed)
+
+                                @{
+                                    if ((item.People_Needed - item.People_Claimed) > 0)
+                                    {
+                                        pclaimed = "inline";
+                                        npclaimed = "none";
+                                    }
+
+                                    else
+                                    {
+                                        pclaimed = "none";
+                                        npclaimed = "inline";
+                                    }
+                                }
+                            </b3>
+
+                            @*<form asp-controller="Explore" asp-action="Index" name="UpdateClaim">
+
+                    <button type="submit" value="submit" formaction=@Url.Action("UpdateClaim")>
+                    </button>
+                    </form>*@
+                            <br>
+                            <br>
+                            <span style="display:@pclaimed;">
+                                <a asp-action="Claim" asp-route-id="@item.Id">Claim</a> |
+                            </span>
+                            <span style="display:@npclaimed;">
+                            </span>
+                            @*<button type="submit" formaction=@Url.Action("Status") method="post">  Claim</button>*@
+                            @*subtracting 1 from people needed if claimed, add 0 if not claimed*@
+
+                            @*
+                    <button type="submit" name="status" value="hiddenvalue">Claimed</button>
+
+                    <button name="status" value="claimed">Claimed</button>
+                    <button type="submit" value="submit" formaction=@Url.Action("FilterbyDate") />
+                    *@
+                            <a asp-action="Details" asp-route-id="@item.Id">See Details</a>|
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
     </tbody>
 </table>
 </body>

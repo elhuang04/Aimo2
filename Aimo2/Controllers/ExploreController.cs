@@ -35,13 +35,17 @@ namespace Aimo2.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return _context.Explore != null ?
-                          View(await _context.Explore.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Explore'  is null.");
-
+            if (_context.Explore == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Explore'  is null.");
+            }
+            var explore = from m in _context.Explore
+                          select m;
+            explore = explore.OrderByDescending(s => s.Due_Date!).ThenBy(s => s.Task_Title!);
+            return View(explore);
         }
         [HttpPost]
-        public ActionResult FilterbyDate(DateTime StartDate, DateTime EndDate)
+        public ActionResult FilterbyDate(DateTime StartDate, DateTime EndDate, string searchText)
         {
 
             if (_context.Explore == null)
@@ -51,20 +55,66 @@ namespace Aimo2.Controllers
             var explore = from m in _context.Explore
                           select m;
 
-             
+            var filteredtasks = explore.AsQueryable();
+            if (!String.IsNullOrEmpty(searchText)) filteredtasks = filteredtasks.Where(k => k.Task_Title.ToLower().Contains(searchText.ToLower()));
+
+           // if (!String.IsNullOrEmpty(StartDate.ToString()) && !String.IsNullOrEmpty(EndDate.ToString()))
+            //{
+                if (StartDate.ToString("yyyy-MM-dd") == "0001-01-01")
+                {
+                    if (EndDate.ToString("yyyy-MM-dd") != "0001-01-01")
+                    filteredtasks = filteredtasks.Where(s => s.Due_Date.Date <= EndDate);
+                    else
+                    filteredtasks = filteredtasks.Where(s => s.Due_Date.Date != null);
+                 }
+                else
+                {
+                     if (EndDate.ToString("yyyy-MM-dd") != "0001-01-01")
+                      filteredtasks = filteredtasks.Where(s => s.Due_Date.Date >= StartDate && s.Due_Date.Date <= EndDate);
+                     else
+                    filteredtasks = filteredtasks.Where(s => s.Due_Date.Date >= StartDate );
+                 }
+                          
+
+
+           // }
+               
+            var result = filteredtasks.ToList(); // execute query
+            
+            
+            if (!String.IsNullOrEmpty(searchText))
+                {
+                TempData["FilterbyTitle"] = searchText;
+                //explore = explore.Where(k => k.Task_Title.ToLower().Contains(searchText.ToLower()));
+            }
             if (!String.IsNullOrEmpty(StartDate.ToString()) && !String.IsNullOrEmpty(EndDate.ToString()))
             {
                 //save input values to tempdata, similar to session param
-                TempData["startdt"]=StartDate.ToString("yyyy-MM-dd");
+
+                TempData["startdt"] = StartDate.ToString("yyyy-MM-dd");
                 TempData["enddt"] = EndDate.ToString("yyyy-MM-dd");
-                explore = explore.Where(s => s.Due_Date!.Date >= StartDate && s.Due_Date!.Date <= EndDate);
-                return View("Index",explore);  
+
+
+                // explore = explore.Where(s => s.Due_Date.Date >= StartDate && s.Due_Date.Date <= EndDate);
+
             }
-            return View();
+            //return View("Index", explore.AsNoTracking().ToListAsync());
+            return View("Index", result);
+            //return View();
         }
 
-        // GET: Explore/Details/5
-        [Authorize]
+
+
+    //Due_Date section fitler
+    [Authorize]
+        /*public ActionResult Due_Date(string sortOrder)
+        {
+            if (ViewBag.DateSortParm = sortOrder == "Due_Date" ? "date_desc" : "Date";)
+           else (ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Task_Title" : "";)
+        }*/
+
+            // GET: Explore/Details/5
+            [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Explore == null)
@@ -175,6 +225,8 @@ namespace Aimo2.Controllers
             {
                 return NotFound();
             }
+            ViewData["People_Claimed"] = explore.People_Claimed;
+            
             return View(explore);
         }
 
@@ -195,6 +247,7 @@ namespace Aimo2.Controllers
             {
                 try
                 {
+                    ViewData["People_Claimed"] = explore.People_Claimed;
                     _context.Update(explore);
                     await _context.SaveChangesAsync();
                 }
