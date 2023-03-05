@@ -37,8 +37,8 @@ a.navbar-brand {
     font-weight: 400;
     font-size: 60px;
     line-height: 70px;
-    /*text-decoration: underline;
-    color: #4AD2E4; */
+    text-decoration: underline;
+    color: #4AD2E4;
 }
 
 
@@ -86,6 +86,7 @@ button.accept-policy {
         font-size: 20px;
         line-height: 39px;
         text-decoration: underline;
+        text-decoration-color:white;
     }
 
 .bg-white {
